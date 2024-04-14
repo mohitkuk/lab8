@@ -11,21 +11,19 @@ class TwitterModel {
     });
   
     this.rwClient = this.client.readWrite;
-    this.createdTweets = new Set(); // Set to store unique tweet content
+    this.createdTweets = new Set(); 
   }
 
   async tweet(text) {
     try {
-      // Check if the tweet content already exists
-      if (this.createdTweets.has(text)) {
-        return "Tweet with duplicate content cannot be created";
-      }
       
-      // If not, create the tweet
-      await this.rwClient.v2.tweet(text);
+      const uniqueText = `${text} - ${new Date().toISOString()}`;
       
-      // Add the tweet content to the set
-      this.createdTweets.add(text);
+      
+      await this.rwClient.v2.tweet(uniqueText);
+      
+      
+      this.createdTweets.add(uniqueText);
       
       return "Tweet created successfully";
     } catch (error) {
@@ -36,3 +34,4 @@ class TwitterModel {
 }
 
 module.exports = TwitterModel;
+
